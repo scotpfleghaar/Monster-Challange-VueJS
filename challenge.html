@@ -107,6 +107,7 @@
                     if(this.healthPotions > 0) {
                         this.youHealth += (Math.floor(Math.random() * 10));
                         this.healthPotions--;
+                        this.messages.unshift({note: "Player Took Health postion ", color: 'lightblue'});
                     }
                 },
                 giveUp: function(){
