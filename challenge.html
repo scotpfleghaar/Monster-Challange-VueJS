@@ -34,15 +34,19 @@
         </div> 
         <div class="row">
             <div class="col-12 text-center my-5">
-                <button @click="gameStart" v-if="!gameStatus" class="btn btn-success">New Game</button>
+                <section  v-if="!gameStatus">
+                     <button @click="gameStart" class="btn btn-success">New Game</button>
+                </section>
 
-                <button v-if="gameStatus" class="btn btn-warning" @click="attack">Attack!</button>
+                <section v-if="gameStatus">
+                    <button  class="btn btn-warning" @click="attack">Attack!</button>
 
-                <button v-if="gameStatus" class="btn btn-success" @click="specialAttack">SPECIAL ATTACK!</button>
+                    <button  class="btn btn-success" @click="specialAttack">SPECIAL ATTACK!</button>
 
-                <button v-if="gameStatus" class="btn btn-info" @click="heal">health potion <small>({{healthPotions}}  left)</small></button>
+                    <button  class="btn btn-info" @click="heal">health potion <small>({{healthPotions}}  left)</small></button>
 
-                <button v-if="gameStatus" class="btn btn-info" @click="giveUp">give up...</button>
+                    <button class="btn btn-info" @click="giveUp">give up...</button>
+                </section>
             </div>
         </div>
         <div v-if="gameStatus"  class="row">
