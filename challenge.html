@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <title>Vue Test with Bootstrap</title>
+   
+</head>
+<body>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-12 text-center">
+                    <h1>{{title}}</h1>
+            </div>    
+        </div>  
+        <div class="row">
+            <div class="col-6">
+                    <h4>Monster</h4>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                        :style="{width: monsterHealth + '%'}">{{monsterHealth}}</div>
+                    </div>
+            </div>  
+            <div class="col-6">
+                    <h4>Player</h4>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                        :style="{width: youHealth + '%'}">{{youHealth}}</div>
+                    </div>
+            </div>    
+        </div> 
+        <div class="row">
+            <div class="col-12 text-center my-5">
+                <button @click="gameStart" v-if="!gameStatus" class="btn btn-success">New Game</button>
+
+                <button v-if="gameStatus" class="btn btn-warning" @click="attack">Attack!</button>
+
+                <button v-if="gameStatus" class="btn btn-success" @click="specialAttack">SPECIAL ATTACK!</button>
+
+                <button v-if="gameStatus" class="btn btn-info" @click="heal">health potion <small>({{healthPotions}}  left)</small></button>
+
+                <button v-if="gameStatus" class="btn btn-info" @click="giveUp">give up...</button>
+            </div>
+        </div>
+        <div v-if="gameStatus"  class="row">
+            <div class="col-12 text-center">
+                <div class="card">
+                    <div v-for="message in messages" class="p-1 card-body">
+                        <div :style="{'background-color': message.color}">
+                                {{ message.note }}
+                        </div>
+                       
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+
+
+
+    
+    <script>
+        new Vue ({
+            el: '#app',
+            data: {
+                title: "Monster Challenge",
+                monsterHealth: 100,
+                youHealth: 100,
+                gameStatus: false,
+                healthPotions: 3,
+                messages: [],
+            },
+            watch: {
+                youHealth: function(){
+                    if(this.youHealth < 0){
+                        alert('GAME OVER! YOU LOSE!!');
+                        this.giveUp();
+                    }
+                },
+                monsterHealth: function(){
+                    if(this.monsterHealth < 0){
+                        alert('GAME OVER! YOU WIN!!!!!!');
+                        this.giveUp();
+                    }
+                }
+            },
+            methods: {
+                gameStart: function(){
+                    this.gameStatus = true;
+                },
+                attack: function(){
+                    var monsterAttack = Math.floor(Math.random() * 10);
+                    var playerAttack = Math.floor(Math.random() * 10);
+                    this.monsterHealth -= monsterAttack
+                    this.messages.unshift({note: "Monster hit attack was " + playerAttack, color: 'red'});
+                    this.youHealth -= playerAttack
+                    this.messages.unshift({note: "Player hit attack was " + monsterAttack, color: 'green'});
+                },
+                specialAttack: function(){
+                    this.monsterHealth -= (Math.floor(Math.random() * 20))
+                    this.youHealth -= (Math.floor(Math.random() * 10))
+                },
+                heal: function(){
+                    if(this.healthPotions > 0) {
+                        this.youHealth += (Math.floor(Math.random() * 10));
+                        this.healthPotions--;
+                    }
+                },
+                giveUp: function(){
+                    this.gameStatus = false;
+                    this.monsterHealth = 100;
+                    this.youHealth = 100;
+                    this.healthPotions = 3;
+                    this.messages = [];
+                },
+            }
+        });
+
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</body>
+
+</html>
